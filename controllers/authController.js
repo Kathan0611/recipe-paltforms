@@ -93,6 +93,36 @@ exports.login = async (req, res) => {
   }
 };
 
+exports.getAll=async(req,res)=>{
+  try{
+    
+    const getAll=await User.findAll({});
+
+    if(!getAll.length>0){
+      return res.status(400).json({
+        error:true,
+        message:'message are true',
+        statusCode:400
+      })
+    }
+    else{
+      return res.status(200).json({
+        error:false,
+        message:"all message are good",
+        statusCode:200,
+        data:getAll
+      })
+    }
+
+  }
+  catch(err){
+    return res.status(500).json({
+      error:true,
+      message:err.message,
+      statusCode:500
+    })
+  }
+}
 // exports.forgotPassword = async (req, res, next) => {
 //   try {
 //     const { email } = req.body;

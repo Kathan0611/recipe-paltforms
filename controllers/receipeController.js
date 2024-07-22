@@ -1,40 +1,107 @@
 const Recipe = require("./../models/Recipe");
+const cloudinary=require('cloudinary').v2;
+const fs=require('fs');
+const path=require('path');
+cloudinary.config({ 
+    cloud_name: 'dzjsh0yaj', 
+    api_key: '268313789642539', 
+    api_secret: '7k4EXg2o1ORMESgD3-XW8lg7arw' 
+});
 
 //createNewRecipe
 exports.CreateNewReciepe= async (req,res)=>{
-      
-    const{title,Description,Ingredients,Instructions,Category,author,BannerImage}=req.body;
-     console.log(title,Description,Ingredients,Instructions,Category,author,BannerImage)
-    if(!title || !Description || !Ingredients || !Instructions || !Category || !author || !BannerImage){
-          return res.status(400).json({
-            message:"please required all field to filledup"
-          })
-    }
-     const Image= req.files.map(file=>file.filename);
-     const existedReceipe = await Recipe.findOne({ title: title });
+          
+  //   const{title,Description,Ingredients,Instructions,Category,author,BannerImage}=req.body;
 
-     if(existedReceipe){
-         return res.status(400).json({
-            message:'already exist receipe'
-         })
-     }
+  //  console.log(title,Description,Ingredients,Instructions,Category,author,BannerImage)
+
+    // if(!title || !Description || !Ingredients || !Instructions || !Category || !author || !BannerImage){
+    //       return res.status(400).json({
+    //         message:"please required all field to filledup"
+    //       })
+    // }
+    //  const upload=''
+    const fs = require('fs');
+    const path = require('path');
+    
+    const Image = '1719856398345-2.jpg';
+    const imagePath = path.resolve(__dirname, '../uploads', Image);
+    
+    // Read file synchronously
+    var bitmap = fs.readFileSync(imagePath);
+    
+    // Encode to base64
+    const encode = Buffer.from(bitmap).toString('base64');
+    
+    const decoded = Buffer.from(encode, 'base64');
+    //  async function countAllImages() {
+    //   try {
+    //     const result = await cloudinary.api.resources({
+    //       max_results: 1  // Fetch only 1 resource to get total count
+    //     });
+    
+    //     const totalCount = result; // Corrected property name
+    //     console.log(`Total number of images in Cloudinary: ${totalCount}`);
+        
+    //   } catch (error) {
+    //     console.error('Error counting images:', error);
+    //   }
+    // }
+    
+    
+    // countAllImages();
+
+
+    //  const uploadResult = await cloudinary.uploader.upload
+     cloudinary.uploader.upload('data:image/jpg;base64'+ encode, { 
+      folder: 'library', // optional - specify a folder in Cloudinary
+      public_id: 'kathan',
+      resource_type: 'image'    // specify the type of resource (image, video, raw)
+    }, function(error, result) {
+      if (error) {
+        console.error(error.message);
+      } else {
+        console.log(result,"jk");
+      }
+    });
+  //    .upload(
+  //     decoded, {
+  //            public_id: 'mathan',
+  //        }
+  //    )
+  //    .catch((error) => {
+  //        console.log(error,error.message);
+  //    });
+     
+  //    const optimizeUrl = cloudinary.url('mathan', {
+  //     fetch_format: 'auto',
+  //     quality: 'auto'
+  //    });
+  
+  //    console.log(optimizeUrl);
+  
+  // // Transform the image: auto-crop to square aspect_ratio
+  //     const autoCropUrl = cloudinary.url('mathan', {
+  //             crop: 'auto',
+  //             gravity: 'auto',
+  //             width: 500,
+  //             height: 500,
+  //     });
+  
+  //    console.log(autoCropUrl);    
+
+    
      const newRecipe = await Recipe.create({
-       title: title,
-       Description: Description,
-       Ingredients: Ingredients,
-       Instructions: Instructions,
-       Category: Category,
-       author: author,
-       BannerImage: BannerImage,
-       Image:Image
+       Image
      });
-
+     debugger
      return res.status(201).json({
        error: false,
        status: 201,
        message: "successfully created receipe",
        recipe: newRecipe
      });
+     
 
 }
 

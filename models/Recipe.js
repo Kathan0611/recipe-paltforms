@@ -4,19 +4,19 @@ const recipeSchema = mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: false,
     },
     Description: {
       type: String,
-      required: true,
+      required: false,
     },
     Ingredients: {
       type: Array,
-      required: true,
+      required: false,
     },
     Instructions: {
       type: String,
-      required: true,
+      required: false,
     },
     Category: {
       type: String,
@@ -30,10 +30,10 @@ const recipeSchema = mongoose.Schema(
     },
     BannerImage: {
       type: String,
-      required: true,
+      required: false,
     },
     Image: {
-      type: [String],
+      type: String,
       required: true,
     },
   },
